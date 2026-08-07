@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-block-size: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  inline-size: 90%;
+  max-inline-size: 480px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 2rem;
+  margin-block-end: 4px;
+}
+
+.subtitle {
+  color: #666;
+  margin-block-end: 24px;
+}
+
+.card {
+  background: #f5f6fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-block-end: 20px;
+}
+
+.card h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-block-end: 16px;
+}
+
+.card dl div {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-block-end: 1px solid #e3e5ee;
+}
+
+.card dl div:last-child {
+  border-block-end: none;
+}
+
+.card dt {
+  color: #666;
+}
+
+.card dd {
+  font-weight: 600;
+}
+
+.hint {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.hint code {
+  background: #eef0f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}

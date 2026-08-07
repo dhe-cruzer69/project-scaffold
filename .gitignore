@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Environment files - never commit real secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Azure Developer CLI (azd)
+.azure/
+bin/
+
+# Editor / agent artifacts
+.claude/
+.idea/
+.vscode/
+*.code-workspace
+
+# Stray terminal/agent junk files accidentally created in the repo root
+PowerShell.exe
+STILL_ACTIVE when
+"STILL_ACTIVE when"

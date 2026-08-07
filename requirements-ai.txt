@@ -1,0 +1,6 @@
+# ARIEX AI service layer dependencies
+httpx>=0.27.0
+loguru>=0.7.2
+# Optional cloud providers (fallback). Uncomment when using them.
+# openai>=1.40.0
+# anthropic>=0.34.0

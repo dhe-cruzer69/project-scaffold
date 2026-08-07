@@ -1,0 +1,10 @@
+# This file defines the Azure Developer CLI (azd) configuration.
+name: project-scaffold
+metadata:
+  template: project-scaffold@1.0.0
+services:
+  web:
+    project: .
+    language: js
+    host: appservice
+    dist: .
