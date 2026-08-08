@@ -10,6 +10,13 @@ are wired up correctly.
 
 import asyncio
 import sys
+from pathlib import Path
+
+# Ensure the `arx` package under `src/` is importable when running from the
+# project root without installing the package into the environment.
+SRC = Path(__file__).resolve().parent / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
 
 from arx.ai import AIRouter, OllamaProvider, OpenAIProvider, AnthropicProvider
 
