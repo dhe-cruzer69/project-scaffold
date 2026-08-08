@@ -78,7 +78,7 @@ class AnthropicProvider(Provider):
         client = self._get_client()
         system = kwargs.pop("system", None)
         max_tokens = kwargs.pop("max_tokens", DEFAULT_MAX_TOKENS)
-        if max_tokens <= 0:
+        if not isinstance(max_tokens, int) or isinstance(max_tokens, bool) or max_tokens <= 0:
             raise ValueError("max_tokens must be a positive integer.")
 
         message = await client.messages.create(
