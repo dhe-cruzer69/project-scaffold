@@ -1,0 +1,10 @@
+{
+  "include": ["src", "test_ai.py", "test_fleet.py"],
+  "executionEnvironments": [
+    {
+      "root": "src",
+      "extraPaths": []
+    }
+  ]
+}
+
