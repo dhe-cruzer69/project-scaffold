@@ -5,8 +5,7 @@ import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from .providers import groq, ollama
-from .runtime import X4MasterRuntime, PolicyViolation
-
+from .runtime import PolicyViolation, X4MasterRuntime
 
 runtime = X4MasterRuntime({"ollama": ollama(), "groq": groq()})
 
@@ -38,7 +37,7 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, runtime.process(request))
         except PolicyViolation as exc:
             self._json(403, {"error": str(exc)})
-        except Exception as exc:
+        except (ValueError, KeyError, OSError, RuntimeError, TypeError) as exc:
             self._json(500, {"error": str(exc)})
 
 
