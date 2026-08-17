@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from x4.core import Candidate, Constitution, TaskType
+from x4.core import Candidate, Constitution, Outcome, TaskType
 from x4.runtime import AuditLedger, EconomicOptimizer, PolicyViolation, PolicyWall, PythonVerifier
 
 
@@ -28,12 +28,17 @@ def test_optimizer_selects_lowest_cost_viable_candidate() -> None:
 
 def test_python_verifier_uses_ast() -> None:
     verifier = PythonVerifier()
-    assert verifier.verify({"task_type": TaskType.CODE_GENERATION.value}, "def add(a, b):\n    return a + b") ["passed"]
-    assert not verifier.verify({"task_type": TaskType.CODE_GENERATION.value}, "def broken(:") ["passed"]
+    assert verifier.verify(
+        {"task_type": TaskType.CODE_GENERATION.value},
+        "def add(a, b):\n    return a + b",
+    )["passed"]
+    assert not verifier.verify(
+        {"task_type": TaskType.CODE_GENERATION.value},
+        "def broken(:",
+    )["passed"]
 
 
 def test_ledger_is_append_only_jsonl() -> None:
-    from x4.core import Outcome
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "outcomes.jsonl"
         ledger = AuditLedger(str(path))
