@@ -8,51 +8,56 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
-const APP_NAME = process.env.APP_NAME || 'project-scaffold';
+const APP_NAME = process.env.APP_NAME || 'X4-ARX369 Omega';
 const DEBUG = process.env.DEBUG === 'true';
+const X4_HEALTH_URL = process.env.X4_HEALTH_URL || 'http://127.0.0.1:8080/health';
 
-// Security headers (CSP, X-Frame-Options, X-Content-Type-Options, etc.)
 app.use(helmet());
-
-// CORS: allow-list of origins. Defaults to same-origin only (no CORS headers).
 const allowedOrigins = (process.env.CORS_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean);
-app.use(
-  cors({
-    origin: allowedOrigins.length ? allowedOrigins : false,
-  })
-);
-
-// Rate limiting for API endpoints (brute-force / DoS protection)
-const apiLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 60, // limit each IP to 60 requests per window
+app.use(cors({ origin: allowedOrigins.length ? allowedOrigins : false }));
+app.use(rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
   standardHeaders: true,
   legacyHeaders: false,
-});
-app.use('/api', apiLimiter);
-
-// Serve static files from the public directory
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Simple API endpoint demonstrating usage of configured values
 app.get('/api/config', (req, res) => {
   res.json({
     appName: APP_NAME,
     debug: DEBUG,
-    // NOTE: never expose the real API key publicly in production
-    apiKeyConfigured: Boolean(process.env.API_KEY && process.env.API_KEY !== 'replace-me')
+    apiKeyConfigured: Boolean(process.env.API_KEY && process.env.API_KEY !== 'replace-me'),
   });
 });
 
-// Fallback to the main page
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'green', service: APP_NAME, timestamp: new Date().toISOString() });
+});
+
+app.get('/api/x4/status', async (req, res) => {
+  try {
+    const response = await fetch(X4_HEALTH_URL, { signal: AbortSignal.timeout(1200) });
+    const body = await response.json().catch(() => ({}));
+    res.status(200).json({
+      status: response.ok ? 'green' : 'red',
+      reachable: response.ok,
+      url: X4_HEALTH_URL,
+      upstream: body,
+    });
+  } catch (error) {
+    res.status(200).json({
+      status: 'amber',
+      reachable: false,
+      url: X4_HEALTH_URL,
+      reason: error instanceof Error ? error.message : 'unreachable',
+    });
+  }
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-if (DEBUG) {
-  console.log(`[${APP_NAME}] Running in DEBUG mode`);
-}
-
-app.listen(PORT, () => {
-  console.log(`${APP_NAME} is running on http://localhost:${PORT}`);
-});
+if (DEBUG) console.log(`[${APP_NAME}] Running in DEBUG mode`);
+app.listen(PORT, () => console.log(`${APP_NAME} is running on http://localhost:${PORT}`));

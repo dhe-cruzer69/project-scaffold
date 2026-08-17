@@ -1,102 +1,57 @@
-# Project Scaffold
+# Project Scaffold + X4-ARX369 Ω Beast Arsenal
 
-A minimal Node.js/Express project scaffold generated from the `.env.example` configuration.
+This repository remains the Node.js/Express application scaffold and now contains a **dependency-light X4 runtime MVP** under `x4/`.
 
-## Getting Started
+## X4 runtime
 
-1. Install dependencies:
+The current MVP provides:
 
-   ```bash
-   npm install
-   ```
+- immutable-style Constitution and Policy Wall rejection
+- task classification (`TaskDNA`)
+- cost/quality/reliability-aware provider selection
+- Ollama + Groq adapters
+- AST-based Python syntax verification for code tasks
+- append-only JSONL audit ledger
+- HTTP `/health` and `/v1/chat/completions` endpoints
 
-2. Configure your environment:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Then edit `.env` and replace the placeholder values.
-
-3. Start the server:
-
-   ```bash
-   npm start
-   ```
-
-4. Open `http://localhost:8000` in your browser.
-
-## Configuration
-
-| Variable       | Description                                        | Default            |
-|----------------|----------------------------------------------------|--------------------|
-| APP_NAME       | The name of the application                        | `project-scaffold` |
-| DEBUG          | Enable debug mode (`true`/`false`)                 | `true`             |
-| PORT           | The port the server listens on                     | `8000`             |
-| API_KEY        | Your API key                                       | `replace-me`       |
-| CORS_ORIGINS   | Comma-separated allow-list of origins for CORS.    | *(empty = same-origin)* |
-|                | Leave empty to disable cross-origin requests.      |                    |
-
-## Project Structure
-
-```text
-project-scaffold/
-├── .env.example       # Template environment file
-├── .env               # Actual environment config (git-ignored)
-├── package.json       # Dependencies and scripts
-├── server.js          # Express server entry point
-├── public/            # Static frontend assets
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
-└── README.md
-```
-
-## ARIEX AI Service Layer
-
-The project also includes an AriexCore model-fleet engine under `src/arx/ai/` — five
-specialized expert profiles (Meaw, Fab, Ops, Sony, Helex) with an auto-router and
-model cascading. Run the self-tests with:
+### Run locally
 
 ```bash
-# from the project root, with src/ on the Python path
-$env:PYTHONPATH="src"; python test_fleet.py
-$env:PYTHONPATH="src"; python test_ai.py
+python -m x4.serve --host 127.0.0.1 --port 8080
 ```
 
-## License
-
-MIT
-
-## Deploy to Azure
-
-This project includes Azure Developer CLI (azd) configuration to deploy to Azure App Service.
-
-### Prerequisites
-
-- [Azure Developer CLI (azd)](https://aka.ms/install-azd)
-- [Azure CLI (az)](https://aka.ms/install-azure-cli)
-- An Azure subscription
-
-### Deploy
+Test a health check:
 
 ```bash
-# Set your default Azure subscription
-azd config show
+curl http://127.0.0.1:8080/health
+```
 
-# Provision resources and deploy the app
+Send a request:
+
+```bash
+curl -X POST http://127.0.0.1:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"Write a Python function that adds two numbers","task_type":"code_generation","estimated_budget":0.01}'
+```
+
+Ollama is selected only when healthy. Groq requires `GROQ_API_KEY`.
+
+## Validation
+
+X4 CI runs compile, Ruff lint, and pytest checks from `.github/workflows/x4-arsenal.yml`.
+
+The MVP is an **implementation foundation**, not a claim of production validation. Production promotion still requires provider integration tests, security scanning, benchmark evidence, deployment verification, and rollback testing.
+
+## Existing ARIEX service
+
+The repository also retains the existing AriexCore model-fleet service under `src/arx/ai/`.
+
+## Azure deployment
+
+The existing Azure Developer CLI configuration remains available for the Node application:
+
+```bash
 azd up
 ```
 
-The deployment provisions:
-- **Azure App Service** (Linux, Node 20) running the Express app
-- **App Service Plan** (B1/S1 tier)
-- **Application Insights** for monitoring
-- **Log Analytics Workspace** for telemetry storage
-
-The app uses a **system-assigned managed identity** for authentication — no credentials or keys are stored in connection strings.
-
-### Clean up
-
-```bash
-azd down
+MIT License.

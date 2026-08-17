@@ -1,0 +1,10 @@
+services:
+  x4:
+    build:
+      context: ..
+      dockerfile: x4/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    restart: unless-stopped
