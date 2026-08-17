@@ -3,35 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Scaffold</title>
+  <meta name="description" content="X4-ARX369 Omega live control dashboard" />
+  <title>X4-ARX369 Ω Control</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="container">
-    <h1>Project Scaffold</h1>
-    <p class="subtitle">Your project is ready to go.</p>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">X4-ARX369 Ω</p>
+        <h1>Beast Level Control</h1>
+        <p class="subtitle">Evidence-first runtime, governed execution, and live system health.</p>
+      </div>
+      <div class="hero-status" id="overall">CHECKING</div>
+    </header>
 
-    <section class="card">
-      <h2>Configuration</h2>
-      <dl id="config-list">
-        <div>
-          <dt>App Name</dt>
-          <dd id="app-name">—</dd>
-        </div>
-        <div>
-          <dt>Debug Mode</dt>
-          <dd id="debug-mode">—</dd>
-        </div>
-        <div>
-          <dt>API Key Configured</dt>
-          <dd id="api-key">—</dd>
-        </div>
-      </dl>
+    <section class="grid" aria-label="System status">
+      <article class="panel status-panel"><div class="dot" id="app-dot"></div><div><span>Web control plane</span><strong id="app-status">Checking…</strong></div></article>
+      <article class="panel status-panel"><div class="dot" id="x4-dot"></div><div><span>X4 runtime</span><strong id="x4-status">Checking…</strong></div></article>
+      <article class="panel status-panel"><div class="dot green"></div><div><span>Policy Wall</span><strong>Enforced</strong></div></article>
+      <article class="panel status-panel"><div class="dot green"></div><div><span>Audit Ledger</span><strong>Enabled</strong></div></article>
     </section>
 
-    <p class="hint">
-      Edit values in <code>.env</code> and restart the server to see changes.
-    </p>
+    <section class="panel details">
+      <div class="section-head"><h2>Governance</h2><span class="tag">IMMUTABLE CORE</span></div>
+      <div class="rows">
+        <div><span>Constitution mutation</span><b>Blocked</b></div>
+        <div><span>Evidence requirement</span><b>Required</b></div>
+        <div><span>Promotion</span><b>Validation gated</b></div>
+        <div><span>Rollback</span><b>Required</b></div>
+      </div>
+    </section>
+
+    <section class="panel details">
+      <div class="section-head"><h2>Execution Fabric</h2><span class="tag">MVP</span></div>
+      <div class="chips">
+        <span>Task DNA</span><span>Economic Optimizer</span><span>Ollama</span><span>Groq</span><span>AST Verification</span><span>JSONL Evidence</span>
+      </div>
+    </section>
+
+    <footer><span id="timestamp">Last checked —</span><a href="https://github.com/dhe-cruzer69/project-scaffold/pull/3">PR #3</a><a href="https://github.com/dhe-cruzer69/ariex4ops/issues/4">Arsenal #4</a></footer>
   </main>
   <script src="app.js"></script>
 </body>
