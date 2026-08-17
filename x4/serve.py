@@ -22,8 +22,21 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         if self.path == "/health":
             self._json(200, {"status": "ok", "service": "x4-arsenal"})
-        else:
-            self._json(404, {"error": "not found"})
+            return
+        if self.path == "/api/x4/status":
+            self._json(
+                200,
+                {
+                    "status": "ok",
+                    "service": "x4-arsenal",
+                    "governance": "enforced",
+                    "policy_wall": "active",
+                    "provider_health_gating": "active",
+                    "audit_ledger": "active",
+                },
+            )
+            return
+        self._json(404, {"error": "not found"})
 
     def do_POST(self) -> None:
         if self.path != "/v1/chat/completions":
