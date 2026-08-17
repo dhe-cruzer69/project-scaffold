@@ -6,7 +6,13 @@ from pathlib import Path
 import pytest
 
 from x4.core import Candidate, Constitution, Outcome, TaskType
-from x4.runtime import AuditLedger, EconomicOptimizer, PolicyViolation, PolicyWall, PythonVerifier
+from x4.runtime import (
+    AuditLedger,
+    EconomicOptimizer,
+    PolicyViolation,
+    PolicyWall,
+    PythonVerifier,
+)
 
 
 def test_policy_rejects_instead_of_clamping() -> None:
