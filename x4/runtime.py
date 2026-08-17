@@ -6,6 +6,7 @@ import time
 import uuid
 from dataclasses import asdict
 from pathlib import Path
+from typing import Any, Callable
 
 from .core import Candidate, Constitution, Decision, Outcome, TaskDNA, TaskType
 
@@ -60,10 +61,15 @@ class JudgmentEngine:
 
 class EconomicOptimizer:
     def select(self, candidates: list[Candidate], dna: TaskDNA, budget: float | None = None) -> Decision:
-        viable = [c for c in candidates if c.quality >= dna.quality_requirement and c.reliability >= 0.90 and c.risk <= 0.30 and (budget is None or c.cost <= budget)]
+        viable = [
+            c for c in candidates
+            if c.quality >= dna.quality_requirement
+            and c.reliability >= 0.90
+            and c.risk <= 0.30
+            and (budget is None or c.cost <= budget)
+        ]
         if not viable:
             raise RuntimeError("no viable provider/model satisfies the requested constraints")
-        # Cost first, then quality and latency as tie-breakers.
         viable.sort(key=lambda c: (c.cost, -c.quality, c.latency_ms))
         c = viable[0]
         return Decision(c.provider, c.model, c.cost, c.quality, c.reliability, c.latency_ms, c.risk, f"selected lowest-cost viable candidate ({c.provider}/{c.model})")
@@ -105,13 +111,13 @@ class AuditLedger:
 
 
 class Provider:
-    def __init__(self, name: str, model: str, complete, health=lambda: True) -> None:
-        self.name, self.model, self._complete, self._health = name, model, complete, health
+    def __init__(self, name: str, model: str, complete: Callable[[str, str], str], health: Callable[[], bool] | None = None) -> None:
+        self.name, self.model, self._complete, self._health = name, model, complete, health or (lambda: True)
 
     def healthy(self) -> bool:
         try:
             return bool(self._health())
-        except Exception:
+        except (OSError, RuntimeError, TypeError, ValueError):
             return False
 
     def complete(self, prompt: str, system: str = "") -> str:
@@ -127,7 +133,7 @@ class X4MasterRuntime:
         self.optimizer = EconomicOptimizer()
         self.verifier = PythonVerifier()
 
-    def process(self, request: dict) -> dict:
+    def process(self, request: dict[str, Any]) -> dict[str, Any]:
         request_id = str(uuid.uuid4())
         started = time.perf_counter()
         self.policy.authorize(request)
