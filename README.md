@@ -36,6 +36,28 @@ curl -X POST http://127.0.0.1:8080/v1/chat/completions \
 
 Ollama is selected only when healthy. Groq requires `GROQ_API_KEY`.
 
+<!-- X4-APEX-DIAGRAM-START:project-scaffold -->
+
+```mermaid
+flowchart TD
+    CLIENT[Local Client] --> HEALTH[GET /health]
+    CLIENT --> CHAT[POST /v1/chat/completions]
+    CHAT --> CLASSIFY[TaskDNA Classification]
+    CLASSIFY --> WALL[Constitution and Policy Wall]
+    WALL -->|reject| DENY[Policy Rejection]
+    WALL -->|allow| SELECT[Provider Selection]
+    SELECT --> OLLAMA[Ollama Adapter]
+    SELECT --> GROQ[Groq Adapter]
+    OLLAMA --> RESULT[Candidate Response]
+    GROQ --> RESULT
+    RESULT --> AST[Python AST Syntax Verification for Code Tasks]
+    AST --> LEDGER[Append-only JSONL Audit Ledger]
+    LEDGER --> RESPONSE[API Response]
+    NOTE[Provider tests, security scan, deploy and rollback evidence still required] -. promotion gate .-> RESPONSE
+```
+
+<!-- X4-APEX-DIAGRAM-END:project-scaffold -->
+
 ## Validation
 
 X4 CI runs compile, Ruff lint, and pytest checks from `.github/workflows/x4-arsenal.yml`.
