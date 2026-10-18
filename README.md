@@ -82,23 +82,5 @@ MIT License.
 
 > Status: architecture documentation; implementation and deployment claims require independent verification.
 
-```mermaid
-flowchart TB
-  Developer[Developer] --> Verify[scripts/verify_x4.sh]
-  Verify --> Detect{Project components}
-  Detect --> Node[Node / TypeScript checks]
-  Detect --> Python[Python checks]
-  Node --> NodeInstall[Dependency install]
-  NodeInstall --> NodeLint[Lint + typecheck]
-  NodeLint --> NodeTest[Node tests]
-  Python --> PyInstall[Install project]
-  PyInstall --> PyLint[Lint / format check]
-  PyLint --> PyTest[pytest]
-  NodeTest --> Merge{All required jobs pass?}
-  PyTest --> Merge
-  Merge -->|no| Fail[Non-zero exit + logs]
-  Merge -->|yes| Ready[Verified scaffold baseline]
-  Ready --> CI[Hosted CI]
-```
 **Evidence note:** The dual-stack flow is a target map. Verify the scripts and workflow job graph before claiming every step exists or passes.
 
